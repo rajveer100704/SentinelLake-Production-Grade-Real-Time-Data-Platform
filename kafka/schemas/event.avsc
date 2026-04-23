@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "UserEvent",
+  "namespace": "com.platform.events",
+  "fields": [
+    {"name": "event_id", "type": "string"},
+    {"name": "user_id", "type": "string"},
+    {"name": "event_type", "type": {"type": "enum", "name": "EventType", "symbols": ["click", "view", "purchase"]}},
+    {"name": "timestamp", "type": "long"},
+    {"name": "metadata", "type": {"type": "map", "values": "string"}, "default": {}}
+  ]
+}

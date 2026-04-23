@@ -1,0 +1,46 @@
+name: Platform Validation Suite
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install requests pyspark locust matplotlib
+
+      - name: Spin up Platform Services (Docker Compose)
+        run: |
+          docker-compose up -d
+          # Wait for services to be healthy
+          sleep 60
+
+      - name: Run Production-Grade Validation
+        run: python run_tests.py
+        env:
+          KAFKA_BOOTSTRAP_SERVERS: localhost:9092
+          GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
+
+      - name: Upload Test Report & Charts
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: validation-results
+          path: |
+            test_report.json
+            tests/dashboards/*.png

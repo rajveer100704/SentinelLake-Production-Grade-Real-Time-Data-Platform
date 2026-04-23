@@ -1,0 +1,32 @@
+groups:
+  - name: data_platform_alerts
+    rules:
+      # 1. High Kafka Consumer Lag
+      - alert: HighKafkaLag
+        expr: sum(kafka_consumergroup_lag) by (consumergroup) > 50000
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High Kafka Lag detected in group {{ $labels.consumergroup }}"
+          description: "Consumer group is falling behind by more than 50,000 messages."
+
+      # 2. Spark Job Latency
+      - alert: SparkHighProcessingTime
+        expr: avg(spark_streaming_batch_processing_time_seconds) > 30
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High Spark processing time"
+          description: "Micro-batch processing is taking more than 30 seconds."
+
+      # 3. Pipeline Down (No events processed)
+      - alert: PipelineStalled
+        expr: rate(kafka_topic_partition_current_offset[5m]) == 0
+        for: 10m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Pipeline Stalled"
+          description: "No new offsets detected in Kafka for the last 10 minutes."
