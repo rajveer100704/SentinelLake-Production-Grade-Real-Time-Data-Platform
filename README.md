@@ -100,14 +100,17 @@ python run_tests.py
 
 ### 🟢 Normal Operation (Baseline)
 ![Baseline](./proof/baseline_dashboard.png)
+
 *Stable throughput and near-zero Kafka lag during peak ingestion.*
 
 ### 💣 Failure Injection (Chaos)
 ![Failure](./proof/failure_state.png)
+
 *Visual proof of the system degrading under chaos (Spark master stopped). Kafka lag spikes as expected.*
 
 ### 🔁 Self-Healing Recovery
 ![Recovery](./proof/recovery_state.png)
+
 *Proof of automated recovery. The system restarts the failing service, processes the backlog, and returns to a healthy state.*
 
 ### 📈 Performance Trends & SLA Proof
