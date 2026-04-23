@@ -114,4 +114,6 @@ python run_tests.py
 ![Throughput](./proof/throughput_trend.png)
 ![Latency](./proof/latency_trend.png)
 ![SLA Proof](./proof/sla_proof.png)
+
+
 *Historical benchmarking results confirming adherence to performance SLAs across multiple runs.*
